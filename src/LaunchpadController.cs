@@ -34,32 +34,32 @@ public static class LaunchpadController
     /// <summary>
     /// Connect to MIDI device
     /// </summary>
-    /// <param name="launchpad">The device (launchpad) to connect to</param>
+    /// <param name="device">The MIDI device to connect to</param>
     /// <returns>True iff connection successful</returns>
-    public static bool Connect(Launchpad launchpad)
+    public static bool Connect(IMidiDevice device)
     {
-        launchpad.Input.Open();
-        launchpad.Input.NoteOn += launchpad.MidiPressHandler; // Main 8x8 + Right row
-        launchpad.Input.ControlChange += launchpad.MidiPressHandler; // Top row
-        launchpad.Input.StartReceiving(null);
-        launchpad.Output.Open();
-        return launchpad.Input.IsOpen && launchpad.Output.IsOpen;
+        device.Input.Open();
+        device.Input.NoteOn += device.MidiPressHandler;
+        device.Input.ControlChange += device.MidiPressHandler;
+        device.Input.StartReceiving(null);
+        device.Output.Open();
+        return device.Input.IsOpen && device.Output.IsOpen;
     }
 
     /// <summary>
     /// Disconnect from MIDI device
     /// </summary>
-    /// <param name="launchpad">The device (launchpad) to disconnect from</param>
+    /// <param name="device">The MIDI device  to disconnect from</param>
     /// <returns>True iff disconnection successful</returns>
-    public static bool Disconnect(Launchpad launchpad)
+    public static bool Disconnect(IMidiDevice device)
     {
-        if (launchpad.Input.IsOpen)
+        if (device.Input.IsOpen)
         {
-            launchpad.Clear();
-            launchpad.Input.StopReceiving();
-            launchpad.Input.Close();
+            if (device is Launchpad l) l.Clear();
+            device.Input.StopReceiving();
+            device.Input.Close();
         }
-        if (launchpad.Output.IsOpen) launchpad.Output.Close();
-        return !launchpad.Input.IsOpen && !launchpad.Output.IsOpen;
+        if (device.Output.IsOpen) device.Output.Close();
+        return !device.Input.IsOpen && !device.Output.IsOpen;
     }
 }
