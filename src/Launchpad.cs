@@ -249,7 +249,7 @@ public class Launchpad : IMidiDevice
     {
         if (msg.Velocity > 0) return;
         (int X, int Y) coordinates = GetCoordinates(msg.Pitch);
-        Console.WriteLine($"EVENT: Pitch {msg.Pitch} (mapped to {coordinates}) detected!");
+        // Console.WriteLine($"EVENT: Pitch {msg.Pitch} (mapped to {coordinates}) detected!");
         if (LaunchpadInputEventHandler == null) return;
         LaunchpadInputEventArgs e = new(coordinates);
         LaunchpadInputEventHandler(this, e);
@@ -264,7 +264,7 @@ public class Launchpad : IMidiDevice
     {
         if (msg.Value > 0) return;
         (int X, int Y) coordinates = GetCoordinates((int) msg.Control);
-        Console.WriteLine($"EVENT: Control {msg.Control} (mapped to {coordinates}) detected!");
+        // Console.WriteLine($"EVENT: Control {msg.Control} (mapped to {coordinates}) detected!");
         if (LaunchpadInputEventHandler == null) return;
         LaunchpadInputEventArgs e = new(coordinates);
         LaunchpadInputEventHandler(this, e);
